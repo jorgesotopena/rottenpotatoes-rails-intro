@@ -14,7 +14,15 @@ class MoviesController < ApplicationController
     else 
       @ratings_to_show = params[:ratings].keys
     end
-    @movies = Movie.with_ratings(@ratings_to_show)
+    if params[:sortByMovieTitle] != nil
+      @movies = Movie.with_ratings(@ratings_to_show).order(:title)
+      @sortByMovie = 'bg-warning'
+    elsif params[:sortByReleaseDate] != nil
+      @movies = Movie.with_ratings(@ratings_to_show).order(:release_date)
+      @sortByReleaseDate = 'bg-warning'
+    else
+      @movies = Movie.with_ratings(@ratings_to_show)
+    end
   end
 
   def new
