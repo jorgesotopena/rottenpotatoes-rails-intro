@@ -10,17 +10,18 @@ class MoviesController < ApplicationController
     #@movies = Movie.all
     @all_ratings = Movie.all_ratings
     
-    #if params[:ratings] == nil and params[:sortByMovieTitle] == nil and params[:sortByReleaseDate] == nil
+    if params[:ratings] == nil and params[:sortByMovieTitle] == nil and params[:sortByReleaseDate] == nil
       if session[:ratings] != nil and params[:home] == nil
-        params[:ratings] = session[:ratings]
+        session_ratings = session[:ratings]
       end
       if session[:sortByMovieTitle] != nil and params[:sortReleaseDateChange] == nil
-        params[:sortByMovieTitle] = session[:sortByMovieTitle]
+        session_sortByMovieTitle = session[:sortByMovieTitle]
       end
       if session[:sortByReleaseDate] != nil and params[:sortMovieChange] == nil
-        params[:sortByReleaseDate] = session[:sortByReleaseDate]
+        session_sortByReleaseDate = session[:sortByReleaseDate]
       end
-    #end
+      redirect_to movies_path(:ratings=>session_ratings, :sortByMovieTitle=>session_sortByMovieTitle, :sortByReleaseDate=>session_sortByReleaseDate)
+    end
     if params[:ratings] == nil
       @ratings_to_show = []
       session[:ratings] = nil
