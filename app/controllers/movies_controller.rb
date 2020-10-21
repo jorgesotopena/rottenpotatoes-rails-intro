@@ -9,15 +9,34 @@ class MoviesController < ApplicationController
   def index
     #@movies = Movie.all
     @all_ratings = Movie.all_ratings
+    
+    #if params[:ratings] == nil and params[:sortByMovieTitle] == nil and params[:sortByReleaseDate] == nil
+      if session[:ratings] != nil and params[:home] == nil
+        params[:ratings] = session[:ratings]
+      end
+      if session[:sortByMovieTitle] != nil and params[:sortReleaseDateChange] == nil
+        params[:sortByMovieTitle] = session[:sortByMovieTitle]
+      end
+      if session[:sortByReleaseDate] != nil and params[:sortMovieChange] == nil
+        params[:sortByReleaseDate] = session[:sortByReleaseDate]
+      end
+    #end
     if params[:ratings] == nil
       @ratings_to_show = []
+      session[:ratings] = nil
     else 
       @ratings_to_show = params[:ratings].keys
+      session[:ratings] = params[:ratings]
     end
+    
     if params[:sortByMovieTitle] != nil
+      session[:sortByMovieTitle] = 1
+      session[:sortByReleaseDate] = nil
       @movies = Movie.with_ratings(@ratings_to_show).order(:title)
       @sortByMovie = 'bg-warning'
     elsif params[:sortByReleaseDate] != nil
+      session[:sortByReleaseDate] = 1
+      session[:sortByMovieTitle] = nil
       @movies = Movie.with_ratings(@ratings_to_show).order(:release_date)
       @sortByReleaseDate = 'bg-warning'
     else
